@@ -1,0 +1,21 @@
+DIFFERENCES Controller vs Service
+
+Responsibilities:
+-The requestLoan method in the LoanController is primarily responsible for handling HTTP requests and interacting with
+clients, while the requestLoan method in the LoanService focuses on implementing the core business logic related to loan requests.
+
+Abstraction Level:
+-The requestLoan method in the LoanController operates at a higher level of abstraction, dealing with HTTP-specific
+concerns and delegating business logic to the service layer.
+-The requestLoan method in the LoanService operates at a lower level of abstraction, implementing the detailed logic
+required to process loan requests, validate inputs, and interact with the database.
+
+Coupling and Cohesion:
+-The LoanController and LoanService are loosely coupled, with the controller depending on the service to perform business
+ logic. This separation of concerns improves maintainability and allows for easier unit testing.
+-The LoanService exhibits high cohesion, as it encapsulates related operations related to loan processing, while the
+controller focuses on handling HTTP requests and responses.
+
+*** In summary, while both methods share a common name and purpose, they operate at different layers of the application and
+serve distinct roles in implementing the lending functionality. The separation of concerns between the controller and
+service layers helps to maintain a clear and modular architecture, facilitating code reuse, testing, and maintainability.

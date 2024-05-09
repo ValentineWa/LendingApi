@@ -1,17 +1,22 @@
 package com.yourcompany.database;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Entity
 public class Subscriber {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "id", nullable = false, columnDefinition = "UUID")
+    private UUID id;
     private String msisdn;
     private BigDecimal maxLoanable;
-    // getters and setters
+
+    public Subscriber(String msisdn){
+        this.msisdn = msisdn;
+    }
+
+    public Subscriber() {
+
+    }
 }
