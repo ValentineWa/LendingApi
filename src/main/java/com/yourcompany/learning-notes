@@ -19,3 +19,54 @@ controller focuses on handling HTTP requests and responses.
 *** In summary, while both methods share a common name and purpose, they operate at different layers of the application and
 serve distinct roles in implementing the lending functionality. The separation of concerns between the controller and
 service layers helps to maintain a clear and modular architecture, facilitating code reuse, testing, and maintainability.
+
+
+     //Validate the request
+        if(request.getMsisdn() == null || request.getAmount() == null || request.getAmount().compareTo(BigDecimal.ZERO) <= 0){
+            return ResponseEntity.badRequest().build();
+        }
+        //Check if user exists
+//        boolean userExists = checkIfUserExists(request.getMsisdn());
+//        if(!userExists){
+//            return ResponseEntity.notFound().build();
+//        }
+
+        //Determine if the user is eligible for a loan
+        boolean isEligible = checkLoanEligibility(request.getMsisdn());
+        if(!isEligible){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+
+
+
+         private Loan createLoanRecord(Subscriber msisdn, BigDecimal amount) {
+                return new Loan();
+            }
+
+            private boolean checkLoanEligibility(Subscriber msisdn) {
+                return true;
+            }
+
+        //    private boolean checkIfUserExists(Subscriber msisdn) {
+        //        return msisdn.equals("100");
+        //    }
+
+
+
+//                .orElseThrow(() -> new IllegalArgumentException("Subscriber not found") );
+
+//        if(!subscriber.isPresent()){
+//
+//        }
+
+//    @PostMapping("/repayment-request")
+//    public ResponseEntity<Repayment> repayLoan(@RequestBody RepaymentRequest request) {
+//        // implement repayment logic
+//        return null;
+//    }
+
+//    public Repayment repayLoan(RepaymentRequest request) {
+//        return null;
+//        // implement repayment logic
+//    }

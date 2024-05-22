@@ -2,10 +2,10 @@ package com.yourcompany.dto;
 
 import java.math.BigDecimal;
 
-public class RepaymentRequest {
+public class RepaymentRequestDto {
     private Long loanId;
     private BigDecimal amountRepaid;
-    public RepaymentRequest(Long loanId, BigDecimal amountRepaid ){
+    public RepaymentRequestDto(Long loanId, BigDecimal amountRepaid ){
         this.loanId = loanId;
         this.amountRepaid = amountRepaid;
     }

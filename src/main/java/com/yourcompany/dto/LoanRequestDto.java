@@ -8,14 +8,14 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-public class LoanRequest {
-    private Subscriber msisdn;
+public class LoanRequestDto {
+    private String msisdn;
     private BigDecimal amount;
 
-    public LoanRequest(Subscriber msisdn, BigDecimal amount) {
+    public LoanRequestDto(String msisdn, BigDecimal amount) {
         this.msisdn = msisdn;
         this.amount = amount;
     }
-    public LoanRequest(){}
+    public LoanRequestDto(){}
 
 }

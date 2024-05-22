@@ -1,49 +1,50 @@
 package com.yourcompany.services;
 
-import com.yourcompany.dto.LoanRequest;
-import com.yourcompany.dto.RepaymentRequest;
+import com.yourcompany.database.Subscriber;
+import com.yourcompany.dto.LoanRequestDto;
 import com.yourcompany.database.Loan;
-import com.yourcompany.database.Repayment;
 import com.yourcompany.repositories.LoanRepository;
+import com.yourcompany.repositories.SubscriberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
+import java.util.UUID;
 
 
-//Implement business logic in service classes. Annotate these classes with @Service.
-//Encapsulate data manipulation and interaction with repositories in service methods.
 @Component
-
+@Service
 public class LoanService {
     @Autowired
     private LoanRepository loanRepository;
-//    Service Layer:
-//    Contains business logic and orchestrates interactions between different components of the application.
-//    Responsible for implementing the core functionality of the application, including complex business rules, data manipulation, and interactions with repositories or external services.
-//    Encapsulates reusable and independent units of work, promoting modularity and maintainability.
 
-    public Loan requestLoan(LoanRequest request) {
+    @Autowired
+    private SubscriberRepository subscriberRepository;
+    public Loan requestLoan(LoanRequestDto request) {
     // implement loan request logic
+
+        if(request.getMsisdn() == null || request.getAmount() == null || request.getAmount().compareTo(BigDecimal.ZERO) <= 0){
+            throw new IllegalArgumentException("Invalid loan request");
+        }
+
+        Subscriber subscriber = subscriberRepository .findSubscriberProfileByMsisdn(request.getMsisdn());
+        if (subscriber == null) {
+            throw new EntityNotFoundException("Subscriber not found with msisdn: " + request.getMsisdn());
+        }
 
         //Create a new loan record in the db
         Loan loan = new Loan();
-        loan.setCreationDate(new Date().toInstant());
-        loan.setMsisdn(request.getMsisdn());
+        loan.setId(UUID.randomUUID());
+        loan.setSubscriber(subscriber);
         loan.setAmount(request.getAmount());
-        loan.setDueDate(Date.from(Instant.now().plus(30, ChronoUnit.DAYS)).toInstant());
+        loan.setCreationDate(Instant.now());
+        loan.setDueDate(Instant.now().plus(7, ChronoUnit.DAYS));
         loan.setTransactionStatus(Loan.TransactionStatus.SUCCESS);
         loanRepository.save(loan);
         return loan;
     }
-
-    public Repayment repayLoan(RepaymentRequest request) {
-        return null;
-        // implement repayment logic
-    }
-
-
-
 }

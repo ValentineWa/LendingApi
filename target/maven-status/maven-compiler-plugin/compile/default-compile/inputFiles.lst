@@ -1,0 +1,9 @@
+/Users/valentine.waweru/solos/LendingApi/src/main/java/com/yourcompany/dto/RepaymentRequest.java
+/Users/valentine.waweru/solos/LendingApi/src/main/java/com/yourcompany/dto/LoanRequest.java
+/Users/valentine.waweru/solos/LendingApi/src/main/java/com/yourcompany/database/Repayment.java
+/Users/valentine.waweru/solos/LendingApi/src/main/java/com/yourcompany/LendingApi.java
+/Users/valentine.waweru/solos/LendingApi/src/main/java/com/yourcompany/repositories/LoanRepository.java
+/Users/valentine.waweru/solos/LendingApi/src/main/java/com/yourcompany/services/LoanService.java
+/Users/valentine.waweru/solos/LendingApi/src/main/java/com/yourcompany/database/Loan.java
+/Users/valentine.waweru/solos/LendingApi/src/main/java/com/yourcompany/database/Subscriber.java
+/Users/valentine.waweru/solos/LendingApi/src/main/java/com/yourcompany/controllers/LoanController.java

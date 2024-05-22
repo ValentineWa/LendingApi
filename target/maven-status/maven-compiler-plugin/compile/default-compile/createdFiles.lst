@@ -1,0 +1,10 @@
+com/yourcompany/database/Repayment.class
+com/yourcompany/database/Loan.class
+com/yourcompany/dto/RepaymentRequest.class
+com/yourcompany/database/Subscriber.class
+com/yourcompany/database/Loan$TransactionStatus.class
+com/yourcompany/LendingApi.class
+com/yourcompany/dto/LoanRequest.class
+com/yourcompany/repositories/LoanRepository.class
+com/yourcompany/services/LoanService.class
+com/yourcompany/controllers/LoanController.class
