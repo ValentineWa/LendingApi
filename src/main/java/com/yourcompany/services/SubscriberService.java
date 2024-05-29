@@ -11,7 +11,7 @@ import javax.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@Component
+
 @Service
 public class SubscriberService {
 

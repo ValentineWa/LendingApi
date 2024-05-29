@@ -3,6 +3,7 @@ package com.yourcompany.database;
 import com.sun.istack.NotNull;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
@@ -13,7 +14,8 @@ import lombok.*;
 @Entity
 @Table(name = "loan")
 @ToString
-public class Loan {
+public class Loan implements Serializable {
+
     @Id
     @Column(name = "id", nullable = false, columnDefinition = "UUID")
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -32,7 +34,15 @@ public class Loan {
     @Column(nullable = false)
     private Instant dueDate;
 
+    @Column(nullable = false)
     private TransactionStatus transactionStatus;
+
+    private BigDecimal amountRepaid;
+
+    private BigDecimal loanBalance;
+
+    @Column(nullable = false)
+    private RepaymentStatus repaymentStatus;
 
     public Loan(
             @NotNull UUID id,
@@ -40,16 +50,26 @@ public class Loan {
             BigDecimal amount,
             Instant creationDate,
             Instant dueDate,
-            TransactionStatus transactionStatus) {
+            TransactionStatus transactionStatus,
+            BigDecimal amountRepaid,
+            BigDecimal loanBalance,
+            RepaymentStatus repaymentStatus
+            ) {
         this.id = id;
         this.subscriber = subscriber;
         this.amount = amount;
         this.creationDate = creationDate;
         this.dueDate = dueDate;
         this.transactionStatus = transactionStatus;
+        this.amountRepaid = amountRepaid;
+        this.loanBalance = loanBalance;
+        this.repaymentStatus = repaymentStatus;
     }
 
-    public Loan() { }
+    public Loan() {
+
+    }
+
 
     public enum TransactionStatus {
         PENDING,
@@ -58,5 +78,11 @@ public class Loan {
         FAILED,
         CANCELLED,
         SUCCESS
+    }
+
+    public enum RepaymentStatus {
+        PENDING,
+        PARTIAL,
+        FULL
     }
 }

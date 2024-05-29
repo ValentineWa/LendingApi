@@ -16,7 +16,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 
-@Component
 @Service
 public class LoanService {
     @Autowired
@@ -44,6 +43,7 @@ public class LoanService {
         loan.setCreationDate(Instant.now());
         loan.setDueDate(Instant.now().plus(7, ChronoUnit.DAYS));
         loan.setTransactionStatus(Loan.TransactionStatus.SUCCESS);
+        loan.setRepaymentStatus(Loan.RepaymentStatus.PENDING);
         loanRepository.save(loan);
         return loan;
     }

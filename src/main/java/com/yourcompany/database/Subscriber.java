@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.UUID;
 
@@ -14,7 +15,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "subscriber")
 @ToString
-public class Subscriber {
+public class Subscriber implements Serializable {
     @Id
     @Column(name = "id", nullable = false, columnDefinition = "UUID")
     private UUID id;

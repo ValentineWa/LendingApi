@@ -1,31 +1,22 @@
 package com.yourcompany.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.math.BigDecimal;
 
+
+@Getter
+@Setter
 public class RepaymentRequestDto {
-    private Long loanId;
+    private String msisdn;
     private BigDecimal amountRepaid;
-    public RepaymentRequestDto(Long loanId, BigDecimal amountRepaid ){
-        this.loanId = loanId;
+
+    public RepaymentRequestDto(String msisdn, BigDecimal amountRepaid ){
+        this.msisdn = msisdn;
         this.amountRepaid = amountRepaid;
     }
 
-    public BigDecimal getAmountRepaid(){
-        return amountRepaid;
+    public RepaymentRequestDto() {
     }
-
-    public void setAmountRepaid(BigDecimal amountRepaid){
-        this.amountRepaid = amountRepaid;
-    }
-
-    public Long getLoanId(){
-        return loanId;
-    }
-
-    public void setLoanId(Long loanId){
-        this.loanId = loanId;
-    }
-
-
-
 }
