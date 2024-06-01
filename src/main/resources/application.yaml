@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: lendtech-repayment-api
+
+server:
+  port: 8080
+
+default:
+    loan:
+      months: 6

@@ -58,7 +58,6 @@ public class RepaymentService {
                    BigDecimal amount = loan.getAmount().subtract(repaymentRequest.getAmountRepaid());
 
 
-
                    loan.setAmountRepaid(repaymentRequest.getAmountRepaid());
                    loan.setLoanBalance(amount);
 

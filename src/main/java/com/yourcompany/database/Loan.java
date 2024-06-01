@@ -34,6 +34,8 @@ public class Loan implements Serializable {
     @Column(nullable = false)
     private Instant dueDate;
 
+
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TransactionStatus transactionStatus;
 
@@ -41,6 +43,7 @@ public class Loan implements Serializable {
 
     private BigDecimal loanBalance;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private RepaymentStatus repaymentStatus;
 

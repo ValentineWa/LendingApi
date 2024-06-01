@@ -20,4 +20,7 @@ public interface LoanRepository extends JpaRepository<Loan, Long> {
     @Query("SELECT s FROM Loan s WHERE s.subscriber.msisdn = :msisdn")
     List<Loan> findLoansBySubscriber(@Param("msisdn") String msisdn);
 
+//    @Query("Select s FROM Loan S WHERE s.repaymentStatus ")
+//    List<Loan> findDefaultedLoans(@Param("msisdn") String msisdn);
+
 }
