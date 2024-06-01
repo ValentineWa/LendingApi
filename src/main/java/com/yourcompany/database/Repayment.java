@@ -15,11 +15,12 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
-@Table(name = "repayments")
+@Table(name = "repayment")
 @ToString
 public class Repayment implements Serializable {
     @Id
     @Column(name = "id", nullable = false, columnDefinition = "UUID")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
     @ManyToOne

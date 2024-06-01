@@ -11,6 +11,7 @@ import com.yourcompany.repositories.SubscriberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
@@ -45,39 +46,44 @@ public class RepaymentService {
         }
 
         //Check if msisdn has a loan
-        Loan allSubLoans = loanRepository.findLoansBySubscriber(repaymentRequest.getMsisdn());
+         List <Loan> allSubLoans = loanRepository.findLoansBySubscriber(repaymentRequest.getMsisdn());
 
-        //Get Loan ID
-//        Loan loan = loanRepository.findLoanIdBySubscriber(repaymentRequest.getMsisdn());
+        Repayment repay = null;
 
-        if(allSubLoans != null){
-               if(repaymentRequest.getAmountRepaid().compareTo(allSubLoans.getAmount()) <= 0){
-                   BigDecimal amount = allSubLoans.getAmount().subtract(repaymentRequest.getAmountRepaid());
-                   allSubLoans.setAmountRepaid(repaymentRequest.getAmountRepaid());
-                   allSubLoans.setLoanBalance(amount);
+        if(allSubLoans != null && !allSubLoans.isEmpty()){
+            for(Loan loan : allSubLoans){
 
-                   if(amount.equals(0)){
-                       allSubLoans.setRepaymentStatus(Loan.RepaymentStatus.FULL);
+
+               if(repaymentRequest.getAmountRepaid().compareTo(loan.getAmount()) <= 0){
+                   BigDecimal amount = loan.getAmount().subtract(repaymentRequest.getAmountRepaid());
+
+
+
+                   loan.setAmountRepaid(repaymentRequest.getAmountRepaid());
+                   loan.setLoanBalance(amount);
+
+                   if(amount.equals(BigDecimal.ZERO)){
+                       loan.setRepaymentStatus(Loan.RepaymentStatus.FULL);
                    } else {
-                       allSubLoans.setRepaymentStatus(Loan.RepaymentStatus.PARTIAL);
+                       loan.setRepaymentStatus(Loan.RepaymentStatus.PARTIAL);
                    }
-                   loanRepository.save(allSubLoans);
+                   loanRepository.save(loan);
 
-                   Repayment repay = new Repayment();
+                    repay = new Repayment();
                    repay.setId(UUID.randomUUID());
-                   repay.setLoanId(allSubLoans);
+                   repay.setLoanId(loan);
                    repay.setAmountRepaid(repaymentRequest.getAmountRepaid());
                    repay.setAmountOutstanding(amount);
-                   repay.setAvailableCreditLimit(subscriber.getMaxLoanable().subtract(allSubLoans.getAmount()));
+                   repay.setAvailableCreditLimit(subscriber.getMaxLoanable().subtract(loan.getAmount()));
                    repay.setRepaymentDate(Instant.now());
                    repaymentRepository.save(repay);
-                  return repay;
                } else {
                    throw new IllegalArgumentException("Repayment amount exceeds loan amount");
                }
-        } else{
+        }
+      }else {
             throw new EntityNotFoundException("Loan not found for msisdn: " + repaymentRequest.getMsisdn());
         }
-
+        return repay;
     }
 }
