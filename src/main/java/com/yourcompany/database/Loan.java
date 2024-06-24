@@ -11,9 +11,11 @@ import lombok.*;
 
 @Getter
 @Setter
-@Entity
+
 @Table(name = "loan")
 @ToString
+@MappedSuperclass
+@Inheritance(strategy =  InheritanceType.JOINED)
 public class Loan implements Serializable {
 
     @Id
