@@ -16,3 +16,6 @@ twilio:
   account_sid: ACe0c57c0b5e4effa88cdceead4e20fbf1
   auth_token: 8523393b4e26e4b1060add81becca559
   trial_number: +19125757746
+
+loan:
+  multiple-lending-allowed: true

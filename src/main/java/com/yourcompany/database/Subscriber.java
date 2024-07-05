@@ -24,14 +24,19 @@ public class Subscriber implements Serializable {
     private String msisdn;
 
     @Column(nullable = false)
+    private BigDecimal maxQualified;
+
+    @Column(nullable = false)
     private BigDecimal maxLoanable;
 
     public Subscriber(
             @NotNull UUID id,
             @NotNull String msisdn,
+            BigDecimal maxQualified,
             BigDecimal maxLoanable){
         this.id = id;
         this.msisdn = msisdn;
+        this.maxQualified = maxQualified;
         this.maxLoanable = maxLoanable;
     }
 

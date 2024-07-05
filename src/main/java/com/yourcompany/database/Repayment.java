@@ -40,7 +40,6 @@ public class Repayment implements Serializable {
     private Instant repaymentDate;
 
 
-
     public Repayment(
             @NotNull UUID id,
             @NotNull Loan loanId,

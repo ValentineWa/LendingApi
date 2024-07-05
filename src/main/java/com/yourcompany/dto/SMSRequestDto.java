@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SMSRequestDto {
 
-
     private String phoneNumber;
-
     private String message;
 }

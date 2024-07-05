@@ -17,8 +17,11 @@ import java.util.UUID;
 @Repository
 public interface LoanRepository extends JpaRepository<Loan, Long> {
 
-    @Query("SELECT s FROM Loan s WHERE s.subscriber.msisdn = :msisdn")
+    @Query("SELECT s FROM Loan s WHERE s.subscriber.msisdn = :msisdn ORDER BY s.creationDate ASC")
     List<Loan> findLoansBySubscriber(@Param("msisdn") String msisdn);
 
+
+    @Query("SELECT s FROM Loan s WHERE s.subscriber.msisdn = :msisdn")
+    Loan findSingleLoanBySubscriber(@Param("msisdn") String msisdn);
 
 }

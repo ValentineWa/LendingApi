@@ -11,10 +11,9 @@ import lombok.*;
 
 @Getter
 @Setter
-
+@Entity
 @Table(name = "loan")
 @ToString
-@MappedSuperclass
 @Inheritance(strategy =  InheritanceType.JOINED)
 public class Loan implements Serializable {
 
@@ -43,10 +42,12 @@ public class Loan implements Serializable {
 
     private BigDecimal amountRepaid;
 
+    @Column(nullable = false)
     private BigDecimal loanBalance;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+
     private RepaymentStatus repaymentStatus;
 
     public Loan(
