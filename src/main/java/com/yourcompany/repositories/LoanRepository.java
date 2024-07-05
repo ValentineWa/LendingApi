@@ -12,8 +12,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-//Define interfaces extending JpaRepository or CrudRepository provided by Spring Data JPA.
-//These interfaces provide CRUD operations out-of-the-box.
 @Repository
 public interface LoanRepository extends JpaRepository<Loan, Long> {
 
@@ -23,5 +21,11 @@ public interface LoanRepository extends JpaRepository<Loan, Long> {
 
     @Query("SELECT s FROM Loan s WHERE s.subscriber.msisdn = :msisdn")
     Loan findSingleLoanBySubscriber(@Param("msisdn") String msisdn);
+
+    @Query("SELECT s FROM Loan s WHERE s.dueDate < CURRENT_DATE ORDER BY s.dueDate ASC")
+    List<Loan> findOverDueLoans();
+
+    @Query("SELECT s FROM Loan s")
+    List<Loan> findLoans();
 
 }

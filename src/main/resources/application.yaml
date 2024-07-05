@@ -7,7 +7,7 @@ server:
 
 default:
     loan:
-      months: 6
+      months: 1
 
 proc:
   scheduler: "*/20 * * * * *"

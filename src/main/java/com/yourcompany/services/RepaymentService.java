@@ -2,11 +2,13 @@ package com.yourcompany.services;
 
 import com.sun.istack.NotNull;
 import com.yourcompany.database.Loan;
+import com.yourcompany.database.OldLoans;
 import com.yourcompany.database.Repayment;
 import com.yourcompany.database.Subscriber;
 import com.yourcompany.dto.RepaymentRequestDto;
 import com.yourcompany.dto.SMSRequestDto;
 import com.yourcompany.repositories.LoanRepository;
+import com.yourcompany.repositories.OldLoansRepository;
 import com.yourcompany.repositories.RepaymentRepository;
 import com.yourcompany.repositories.SubscriberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import javax.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -31,6 +34,9 @@ public class RepaymentService {
 
     @Autowired
     private LoanRepository loanRepository;
+
+    @Autowired
+    private OldLoansRepository oldLoansRepository;
 
     @Autowired
     private SubscriberRepository subscriberRepository;
@@ -48,7 +54,19 @@ public class RepaymentService {
         return loans;
     }
 
-
+    private void oldLoans(Loan loan) {
+        OldLoans oldLoans = new OldLoans();
+        oldLoans.setId(loan.getId());
+        oldLoans.setSubscriber(loan.getSubscriber());
+        oldLoans.setAmount(loan.getAmount());
+        oldLoans.setCreationDate(loan.getCreationDate());
+        oldLoans.setLoanBalance(BigDecimal.ZERO);
+        oldLoans.setAmountRepaid(loan.getAmount());
+        oldLoans.setDueDate(loan.getDueDate());
+        oldLoans.setTransactionStatus(OldLoans.TransactionStatus.SUCCESS);
+        oldLoans.setRepaymentStatus(OldLoans.RepaymentStatus.FULL);
+        oldLoansRepository.save(oldLoans);
+    }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 private Repayment repayLoan(RepaymentRequestDto repaymentRequest, Loan loan) {
@@ -58,9 +76,11 @@ private Repayment repayLoan(RepaymentRequestDto repaymentRequest, Loan loan) {
 
         loan.setAmountRepaid(repaymentRequest.getAmountRepaid());
         loan.setLoanBalance(amount);
-
-        if (amount.equals(BigDecimal.ZERO)) {
+        if (amount.compareTo(BigDecimal.ZERO) == 0) {
             loan.setRepaymentStatus(Loan.RepaymentStatus.FULL);
+//            oldLoans(loan);
+//            // Delete the loan from the Loan table
+//            loanRepository.delete(loan);
             log.info("Loan amount {} for msisdn {} has been repaid fully", repaymentRequest.getAmountRepaid(), repaymentRequest.getMsisdn());
         } else {
             loan.setRepaymentStatus(Loan.RepaymentStatus.PARTIAL);
@@ -88,11 +108,7 @@ private Repayment repayLoan(RepaymentRequestDto repaymentRequest, Loan loan) {
     }
 }
 
-
-
-
 //SINGLE LOAN//////////////////
-
 
     public Repayment repaySingleLoan(RepaymentRequestDto repaymentRequest) {
         Loan loan = loanRepository.findSingleLoanBySubscriber(repaymentRequest.getMsisdn());
@@ -103,8 +119,6 @@ private Repayment repayLoan(RepaymentRequestDto repaymentRequest, Loan loan) {
     }
 
 
-
-
 ///////////////MULTIPLE LOANS////////////////////////////
 
     public Repayment repayMultipleLoans(RepaymentRequestDto repaymentRequest) {
@@ -112,15 +126,12 @@ private Repayment repayLoan(RepaymentRequestDto repaymentRequest, Loan loan) {
         if (allSubLoans == null || allSubLoans.isEmpty()) {
             throw new EntityNotFoundException("Loan not found for msisdn: " + repaymentRequest.getMsisdn());
         }
-
         BigDecimal amountToRepay = repaymentRequest.getAmountRepaid();
         Repayment lastRepayment = null;
-
         for (Loan loan : allSubLoans) {
             if (amountToRepay.compareTo(BigDecimal.ZERO) <= 0) {
                 break; // Stop if the repaid amount runs out
             }
-
             BigDecimal loanBalance = loan.getLoanBalance();
             BigDecimal amountRepaid;
 
@@ -129,7 +140,6 @@ private Repayment repayLoan(RepaymentRequestDto repaymentRequest, Loan loan) {
             } else {
                 amountRepaid = amountToRepay;
             }
-
             RepaymentRequestDto singleLoanRepaymentRequest = new RepaymentRequestDto();
             singleLoanRepaymentRequest.setMsisdn(repaymentRequest.getMsisdn());
             singleLoanRepaymentRequest.setAmountRepaid(amountRepaid);
@@ -141,5 +151,4 @@ private Repayment repayLoan(RepaymentRequestDto repaymentRequest, Loan loan) {
 
         return lastRepayment;
     }
-
 }
